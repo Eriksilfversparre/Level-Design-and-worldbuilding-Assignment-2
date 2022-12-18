@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using System.Transactions;
+using UnityEngine.SceneManagement;
 
 public class Enemies : MonoBehaviour
 {
@@ -16,13 +19,13 @@ public class Enemies : MonoBehaviour
     [SerializeField] private Transform[] patrollingPoints;
     private int patrollingCounter = 1;
     private int numberOfPointsToPatrol;
-    private UnityEngine.AI.NavMeshAgent myAgent;
-    private bool reachedDestination;
+    public NavMeshAgent myAgent;
+    public bool reachedDestination;
     private float defaultAcceleration = 40;
 
     [Header("Player in range Settings")]
     [SerializeField] private float distanceToKeepFromPlayer = 3.0f;
-    private FieldOfView myFieldOfView;
+    private EnemyVision myFieldOfView;
 
     [Header("Health system Settings")]
     [SerializeField] public int health = 100;
@@ -31,13 +34,13 @@ public class Enemies : MonoBehaviour
     [SerializeField] private int damage = 20;
 
 
-    // Start is called before the first frame update
+    
     private void Start()
     {
-        myAgent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
+        myAgent = this.GetComponent<NavMeshAgent>();
         myAgent.speed = defaultSpeed;
         numberOfPointsToPatrol = patrollingPoints.Length;
-        myFieldOfView = this.GetComponent<FieldOfView>();
+        myFieldOfView = this.GetComponent<EnemyVision>();
         player = GameObject.FindGameObjectWithTag("Player");
 
 
@@ -49,7 +52,7 @@ public class Enemies : MonoBehaviour
     {
         if (!myAgent.enabled) return;
 
-        if (myFieldOfView.canSeePlayer && !player.GetComponent<Camo>().playerHidden)
+        if (myFieldOfView.canSeePlayer)
         {
             ChasePlayer();
         }
@@ -74,6 +77,9 @@ public class Enemies : MonoBehaviour
         if (myAgent.remainingDistance < distanceToKeepFromPlayer)
         {
             myAgent.isStopped = true;
+            //Time.timeScale = 0;
+            player.GetComponent<Movement>().enabled = false;
+            //StartCoroutine(ExecuteAfterTime(2f));
         }
         else
         {
@@ -108,4 +114,11 @@ public class Enemies : MonoBehaviour
             GoToNextPoint();
         }
     }
-}
+
+   /* IEnumerator ExecuteAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene(2);
+    }*/
+} 
+

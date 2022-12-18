@@ -8,13 +8,12 @@ public class Movement : MonoBehaviour
 
     Rigidbody rb;
 
-    private float YSpeed = 100f;
+    
     float horizontalInput;
     float verticalInput;
     Vector3 moveDirection;
     public float currentRot;
-    public float rotSmoothTime = 1f;
-    
+    public float rotSmoothTime = 1f; 
     public float moveSpeed;
     
     [SerializeField] private float rotationSpeed;
@@ -23,15 +22,13 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         
-
     }
 
     private void Update()
     {
         MyInput();
         SpeedControl();
-        
-
+       
     }
 
     private void FixedUpdate()
@@ -44,7 +41,6 @@ public class Movement : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-      
     }
 
 
@@ -61,16 +57,7 @@ public class Movement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // var rotway = Quaternion.AngleAxis(moveDirection, Vector3.up);
-
-        /*float rotateY = horizontalInput * YSpeed * Time.fixedDeltaTime;
-
-        currentRot = Mathf.SmoothDampAngle(currentRot, rotateY, ref rotationSpeed, rotSmoothTime * Time.fixedDeltaTime);
-        rb.transform.eulerAngles += new Vector3(0, currentRot, 0);
-        */
-
-        //rb.transform.Rotate(0, Input.GetAxisRaw("Horizontal") * rotationSpeed, 0);
-        //rb.MoveRotation(Quaternion.LookRotation(moveDirection, transform.up));
+       
     }
     private void SpeedControl()
     {
